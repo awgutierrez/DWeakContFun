@@ -1,0 +1,83 @@
+# ==========================================
+# Python
+# ==========================================
+
+# Bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging and builds
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Testing and coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ==========================================
+# Lean 4 / Lake
+# ==========================================
+
+# Lake-generated files and dependencies
+.lake/
+
+# Lean compiled artifacts
+*.olean
+*.ilean
+
+# ==========================================
+# Editors and IDEs
+# ==========================================
+
+# VS Code: ignore local settings, keep shared config
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains IDEs
+.idea/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ==========================================
+# OS-generated files
+# ==========================================
+
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Local configuration and secrets
+# ==========================================
+
+.env
+.env.*
+!.env.example
+!.env.template
