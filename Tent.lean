@@ -158,7 +158,10 @@ lemma tentInterval_subset_Icc (n : ℕ) :
     exact le_trans hx_right hle
 
 
-/-! If m<n, then the right endpoint of the nth interval lies strictly to the left of the left endpoint of the mth interval. -/
+/-!
+If m<n, then the right endpoint of the nth interval lies strictly to the left of the
+left endpoint of the mth interval.
+-/
 lemma tentRight_lt_tentLeft_of_lt
     {m n : ℕ} (hmn : m < n) :
     tentRight n < tentLeft m := by
@@ -245,7 +248,10 @@ lemma tent_at_mid
   exact max_eq_right hnonneg
 
 
-/-! The chosen scalar factor normalizes the nth tent so that its value at the midpoint is exactly n. -/
+/-!
+The chosen scalar factor normalizes the nth tent so that its value at the midpoint is
+exactly n.
+-/
 lemma spike_at_mid
     (n : ℕ) :
     spike n ⟨tentMid n, tentMid_mem_Icc n⟩ = (n : ℝ) := by
@@ -310,7 +316,10 @@ lemma spikeInterval_disjoint
   exact Set.disjoint_left.1 hdis hxm' hxn'
 
 
-/-! The spike supports are pairwise disjoint, by containment in the pairwise disjoint subtype intervals. -/
+/-!
+The spike supports are pairwise disjoint, by containment in the pairwise disjoint
+subtype intervals.
+-/
 lemma spike_disjoint_supports :
     ∀ ⦃m n : ℕ⦄, m ≠ n →
       Disjoint

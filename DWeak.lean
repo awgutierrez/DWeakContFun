@@ -26,7 +26,12 @@ unbounded norm growth.
 
 /-! Main Theorem -/
 /-! Metric Functional is Negative at Most One fn-/
-/-! For a metric functional obtained as a pointwise limit of internal metric functionals, negativity on two distinct sequence terms would eventually force one internal approximant to be negative on both, contradicting the internal support lemma. -/
+/-!
+For a metric functional obtained as a pointwise limit of internal metric functionals,
+negativity on two distinct sequence terms would eventually force one internal
+approximant to be negative on both, contradicting the internal support lemma.
+-/
+omit [T2Space K] in
 lemma metric_functional_negative_at_most_one
     (f : ℕ → C(K, ℝ))
     (hdisjoint :
@@ -93,7 +98,6 @@ lemma eventually_nonneg_of_negative_at_most_one
     (hatmost :
       ∀ ⦃m n : ℕ⦄, a m < 0 → a n < 0 → m = n) :
     ∃ N, ∀ n ≥ N, 0 ≤ a n := by
-
   by_cases hneg : ∃ m : ℕ, a m < 0
   · obtain ⟨m, hm⟩ := hneg
     refine ⟨m + 1, ?_⟩
@@ -118,7 +122,6 @@ lemma liminf_nonneg_of_eventually_nonneg
     (a : ℕ → ℝ)
     (ha : ∃ N, ∀ n ≥ N, 0 ≤ a n) :
     0 ≤ Filter.liminf a atTop := by
-
   let S : Set ℝ :=
     {b : ℝ | ∀ᶠ n in (atTop : Filter ℕ), b ≤ a n}
   have hzero : (0 : ℝ) ∈ S := by
@@ -132,7 +135,12 @@ lemma liminf_nonneg_of_eventually_nonneg
   · rw [csSup_of_not_bddAbove hbounded]
     simp
 
-/-! Combining the metric-functional negativity lemma with the previous sequence lemma gives eventual nonnegativity of every metric-functional evaluation on the spike sequence. -/
+/-!
+Combining the metric-functional negativity lemma with the previous sequence lemma
+gives eventual nonnegativity of every metric-functional evaluation on the spike
+sequence.
+-/
+omit [T2Space K] in
 lemma metric_functional_eventually_nonneg
     (f : ℕ → C(K, ℝ))
     (hdisjoint :
@@ -141,13 +149,16 @@ lemma metric_functional_eventually_nonneg
     (h : C(K, ℝ) → ℝ)
     (hmetric : IsMetricFunctional (0 : C(K, ℝ)) h) :
     ∃ N, ∀ n ≥ N, 0 ≤ h (f n) := by
-
   apply eventually_nonneg_of_negative_at_most_one
   intro m n hm hn
   exact metric_functional_negative_at_most_one
     f hdisjoint h hmetric hm hn
 
-/-! Every metric functional therefore has nonnegative liminf along a sequence with pairwise disjoint supports. -/
+/-!
+Every metric functional therefore has nonnegative liminf along a sequence with
+pairwise disjoint supports.
+-/
+omit [T2Space K] in
 lemma metric_functional_liminf_nonneg
     (f : ℕ → C(K, ℝ))
     (hdisjoint :
@@ -156,7 +167,6 @@ lemma metric_functional_liminf_nonneg
     (h : C(K, ℝ) → ℝ)
     (hmetric : IsMetricFunctional (0 : C(K, ℝ)) h) :
     0 ≤ Filter.liminf (fun n => h (f n)) atTop := by
-
   apply liminf_nonneg_of_eventually_nonneg
   exact metric_functional_eventually_nonneg
     f hdisjoint h hmetric
@@ -173,14 +183,18 @@ def DWeaklyConverges
       h z ≤ Filter.liminf (fun n => h (x n)) atTop
 
 
-/-! Pairwise disjoint supports imply d-weak convergence to the zero function: every metric functional is zero at the base point and has nonnegative liminf along the sequence. -/
+/-!
+Pairwise disjoint supports imply d-weak convergence to the zero function: every
+metric functional is zero at the base point and has nonnegative liminf along the
+sequence.
+-/
+omit [T2Space K] in
 lemma dWeaklyConverges_of_disjoint_supports
     (f : ℕ → C(K, ℝ))
     (hdisjoint :
       ∀ ⦃m n : ℕ⦄, m ≠ n →
         Disjoint (Function.support (f m)) (Function.support (f n))) :
     DWeaklyConverges (0 : C(K, ℝ)) f 0 := by
-
   intro h hmetric
   have hzero : h (0 : C(K, ℝ)) = 0 :=
     metric_functional_basepoint hmetric
