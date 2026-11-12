@@ -1,7 +1,7 @@
 # DWeakContFun
 
 A Lean 4 formalization of the moving-tent counterexample showing that a sequence in
-`C([0,1], ℝ)` can converge `d`-weakly to zero while its sup norms are unbounded.
+`C([0,1], ℝ)` can converge `d`-weakly to zero while its sup norms tend to positive infinity.
 
 The formalization follows the counterexample argument of Gutiérrez and Nevanlinna:
 choose pairwise disjoint closed intervals in `[0,1]`, put a continuous nonnegative
@@ -9,12 +9,7 @@ spike on each interval with maximum `n`, and prove that every metric functional 
 negative on at most one spike. The latter implies eventual nonnegativity and hence
 nonnegative liminf. The published counterexample uses the same two key ingredients:
 pairwise disjoint intervals and spikes with maximum value `n`. See Theorem 1.3 and
-its proof in the authors' September 2026 preprint, *A Weak Topology on Metric Spaces*.
-
-> **Note on this README:** the mathematical statements below are written in
-> KaTeX-compatible Markdown. GitHub, GitLab, and many Markdown renderers support
-> the displayed `$$...$$` form; the Lean source itself remains independent of the
-> renderer.
+its proof in the authors' 10 November 2026 revision (arXiv:2609.19368v2), *A Weak Topology on Metric Spaces*.
 
 ## 1. Mathematical setting
 
@@ -51,10 +46,10 @@ The central conclusion is
 $$
 f_n\xrightarrow{d\text{-weak}}0
 \qquad\text{while}\qquad
-\lVert f_n\rVert_\infty\ge n.
+\lVert f_n\rVert_\infty\ge n\longrightarrow+\infty.
 $$
 
-Thus the sequence is `d`-weakly convergent but not norm bounded.
+In particular, the norms tend to positive infinity, not merely fail to be bounded.
 
 ---
 
@@ -72,20 +67,20 @@ Thus the sequence is `d`-weakly convergent but not norm bounded.
 The dependency chain is
 
 $$
-\texttt{NormSupport}
+\mathrm{NormSupport}
 \longrightarrow
-\texttt{MetricFunctional}
+\mathrm{MetricFunctional}
 \longrightarrow
-\texttt{DWeak}
+\mathrm{DWeak}
 \longrightarrow
-\texttt{Tent}
+\mathrm{Tent}
 \longrightarrow
-\texttt{DWeakContFun}.
+\mathrm{DWeakContFun}.
 $$
 
 ---
 
-# 3. Norm attainment and support: `NormSupport.lean`
+## 3. Norm attainment and support: `NormSupport.lean`
 
 ## `norm_attains_at_point`
 
@@ -125,7 +120,7 @@ $$
 contradicting the strict negativity. Therefore
 
 $$
-x\in\operatorname{supp}(f).
+x\in\mathrm{supp}(f).
 $$
 
 ## `internal_negative_at_most_one`
@@ -142,14 +137,14 @@ in both supports, contradicting disjointness.
 This is the elementary set-theoretic transfer lemma:
 
 $$
-\operatorname{supp}(f_n)\subseteq I_n
+\mathrm{supp}(f_n)\subseteq I_n
 $$
 
 and pairwise disjointness of the $I_n$ imply pairwise disjointness of the supports.
 
 ---
 
-# 4. Metric functionals: `MetricFunctional.lean`
+## 4. Metric functionals: `MetricFunctional.lean`
 
 ## `MetricFunctionalWitness`
 
@@ -207,7 +202,7 @@ once” property to arbitrary metric functionals.
 
 ---
 
-# 5. The abstract `d`-weak argument: `DWeak.lean`
+## 5. The abstract `d`-weak argument: `DWeak.lean`
 
 ## `metric_functional_negative_at_most_one`
 
@@ -236,7 +231,7 @@ $$
 contradicting the internal negative-at-most-one lemma. Hence
 
 $$
-\#\{n:h(f_n)<0\}\le1.
+\mathrm{card}\{n:h(f_n)<0\}\le 1.
 $$
 
 This is the central abstract lemma.
@@ -304,7 +299,7 @@ Therefore the sequence converges `d`-weakly to zero.
 
 ---
 
-# 6. The explicit tent construction: `Tent.lean`
+## 6. The explicit tent construction: `Tent.lean`
 
 ## `continuous_tent`
 
@@ -360,7 +355,7 @@ $$
 Hence
 
 $$
-\operatorname{supp}(T_{a,b})
+\mathrm{supp}(T_{a,b})
 \subseteq
 [a,b]
 $$
@@ -369,7 +364,7 @@ after pulling the interval back to the subtype $[0,1]$.
 
 ---
 
-# 7. Pairwise-disjoint intervals
+## 7. Pairwise-disjoint intervals
 
 Define
 
@@ -445,7 +440,7 @@ $$
 
 ---
 
-# 8. Scaling the tents
+## 8. Scaling the tents
 
 Define the midpoint
 
@@ -517,7 +512,7 @@ Thus the sequence is norm-unbounded.
 
 ---
 
-# 9. Supports of the spikes
+## 9. Supports of the spikes
 
 The support is naturally a subset of the subtype `[0,1]`, so the project defines
 
@@ -534,7 +529,7 @@ Multiplying a tent by a scalar cannot create nonzero values outside the original
 tent support. Therefore
 
 $$
-\operatorname{supp}(f_n)\subseteq\widetilde I_n.
+\mathrm{supp}(f_n)\subseteq\widetilde I_n.
 $$
 
 ## `spikeInterval_disjoint`
@@ -549,57 +544,63 @@ By support containment and the ambient disjointness lemma,
 $$
  m\ne n
 \implies
-\operatorname{supp}(f_m)\cap\operatorname{supp}(f_n)=\varnothing.
+\mathrm{supp}(f_m)\cap\mathrm{supp}(f_n)=\varnothing.
 $$
 
 This is exactly the hypothesis required by the abstract argument in `DWeak.lean`.
 
 ---
 
-# 10. Final theorem
+## 10. Final theorem
 
-`DWeakContFun.lean` proves
+The main result is `spike_counterexample_strong` in `DWeakContFun.lean`:
 
 ```lean
- theorem spike_counterexample :
-     DWeaklyConverges
-         (0 : C(Set.Icc (0 : ℝ) 1, ℝ))
-         spike
-         0 ∧
-       ¬ ∃ C : ℝ, ∀ n, ‖spike n‖ ≤ C
+theorem spike_counterexample_strong :
+    DWeaklyConverges
+        (0 : C(Set.Icc (0 : ℝ) 1, ℝ))
+        spike
+        0 ∧
+      Filter.Tendsto
+        (fun n : ℕ => ‖spike n‖)
+        Filter.atTop
+        Filter.atTop := by
+  -- See the Lean source for the proof.
 ```
 
-Mathematically this says
+The theorem proves both that the spike sequence converges `d`-weakly to zero
+(in the liminf sense of Definition 1.1 of the paper) and that
 
 $$
- f_n\xrightarrow{d\text{-weak}}0
+\lim_{n\to\infty}\lVert f_n\rVert_\infty=+\infty.
 $$
 
-and simultaneously
+The first conclusion follows from disjoint supports and the abstract
+metric-functional argument. For the second, `spike_norm_ge` gives
 
 $$
-\sup_n\lVert f_n\rVert_\infty=+\infty.
+\lVert f_n\rVert_\infty\ge n,
 $$
 
-The first conjunct follows from pairwise disjoint supports and the abstract
-metric-functional argument. The second follows from
+which implies divergence to positive infinity. The earlier theorem
+`spike_counterexample`, asserting only failure of a uniform norm bound,
+is retained as a weaker consequence.
 
-$$
-\lVert f_n\rVert_\infty\ge n.
-$$
-
-This is the formalized counterexample to the boundedness conjecture discussed by
-the authors. Their September 2026 preprint explicitly states that the conjecture
-is false and gives the same `C[0,1]` construction with pairwise disjoint intervals
-and spikes of maximum value `n`.
+**Relation to the published theorem.** Theorem 1.3 of Gutiérrez and
+Nevanlinna, *A Weak Topology on Metric Spaces*, arXiv:2609.19368v2
+(10 November 2026), states convergence in the topology
+$\sigma(C[0,1],C[0,1]^{\diamondsuit})$ together with norm divergence.
+This project formalizes the equivalent liminf convergence criterion, as
+characterized by Theorem 1.2 of the paper; it does not independently
+construct that topology or formalize Theorem 1.2.
 
 ---
 
-# 11. Soundness review
+## 11. Soundness review
 
-The source was reviewed lemma-by-lemma with the following conclusions.
+The proof is organized around the following mathematical ingredients.
 
-### Mathematically sound components
+### Main proof ingredients
 
 1. **Norm attainment:** the compactness argument correctly produces a norm-attaining
    point.
@@ -630,8 +631,8 @@ is a narrower API than a completely universe-polymorphic general theory of nets.
 
 ### Proof-engineering observations
 
-- `T2Space K` is not essential to the norm-attainment argument itself, but retaining
-  it is harmless and consistent with the usual compact Hausdorff setting.
+- Several abstract support and convergence lemmas do not require the
+  `T2Space K` assumption; the corresponding unused assumptions were omitted.
 - `continuous_tent` does not actually need the assumption `a ≤ b`; the argument only
   proves continuity. The inequality is nevertheless useful elsewhere, so carrying it
   through the definition is reasonable.
@@ -644,7 +645,7 @@ is a narrower API than a completely universe-polymorphic general theory of nets.
 
 ---
 
-# 12. Building the project
+## 12. Building the project
 
 The project uses Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` as specified by
 `lean-toolchain` and `lakefile.toml`.
@@ -655,11 +656,15 @@ From the project root:
 lake build
 ```
 
-The main theorem is in `DWeakContFun.lean`:
+The strengthened theorem is in `DWeakContFun.lean`:
 
 ```lean
-#check spike_counterexample
+#check spike_counterexample_strong
+#print axioms spike_counterexample_strong
 ```
+
+With the pinned toolchain, the strengthened theorem has been checked to
+depend only on `propext`, `Classical.choice`, and `Quot.sound`.
 
 `Main.lean` imports `Tent` as a lightweight entry point; the library roots are
 listed explicitly in `lakefile.toml`.
@@ -668,7 +673,7 @@ listed explicitly in `lakefile.toml`.
 ## References
 
 - A. W. Gutiérrez and O. Nevanlinna, *Metric functionals and weak convergence*,
-  Z. Anal. Anwend. (2026), arXiv:2506.04154.
+  Z. Anal. Anwend. (2026), [arXiv:2506.04154](https://arxiv.org/abs/2506.04154).
 - A. W. Gutiérrez and O. Nevanlinna, *A Weak Topology on Metric Spaces*,
-  arXiv:2609.19368, September 2026. The second paper contains the explicit
-  `C[0,1]` counterexample formalized here (Theorem 1.3 and its proof).
+  [arXiv:2609.19368v2](https://arxiv.org/abs/2609.19368), revised 10 November 2026.
+  Theorem 1.3 and its proof give the `C[0,1]` counterexample formalized here.
